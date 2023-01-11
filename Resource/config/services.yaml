@@ -1,0 +1,5 @@
+services:
+  Plugin\Test\Service\OrderPdfService:
+    public: false
+    autowire: true
+    decorates: Eccube\Service\OrderPdfService

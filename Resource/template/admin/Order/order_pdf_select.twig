@@ -1,0 +1,32 @@
+ 
+ <script>
+    $(function() {
+        $('.card-body').append($('.add_pdf'));
+    });
+</script>
+ 
+ <div class="add_pdf">
+ <fieldset>
+    <div>
+      <input type="radio" id="huey" name="order_pdf[title2]" value="1"
+             checked>
+      <label for="huey">Huey</label>
+    </div>
+
+    <div>
+      <input type="radio" id="dewey" name="order_pdf[title2]" value="2">
+      <label for="dewey">Dewey</label>
+    </div>
+
+    <div>
+      <input type="radio" id="louie" name="order_pdf[title2]" value="3">
+      <label for="louie">Louie</label>
+    </div>
+</fieldset>
+{# <div class="mb-3">
+                                <label class="col-form-label">タイトル</label>
+                                <input type="text" id="order_pdf_title2" name="order_pdf[title2]" required="required" maxlength="255" class="form-control" value="お買上げ明細書(納品書)">
+                                
+                            </div> #}
+<select id="order_pdf_download_kind2" name="order_pdf[download_kind2]" class="form-select"><option value="1">ファイルに保存</option><option value="2" selected="selected">ブラウザで開く</option></select>
+</div>

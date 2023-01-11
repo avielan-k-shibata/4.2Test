@@ -1,0 +1,218 @@
+<script>
+    $(function() {
+        {# $('#form1').replaceWith($('#matrics_cart')); #}
+
+    });
+</script>
+<script>
+    $(function() {
+
+    $(".uooo").click(function() {
+        const test = $(this).val();
+        console.log(test);
+        $("#ProductClass").val(test);
+    });
+    });
+</script>
+<div id="matrics_cart">
+
+{% if form.classcategory_id1 is defined %}
+    {% if form.classcategory_id2 is defined %}
+        {# 規格2つ #}
+        <p class="kikaku_title">{{Product.className1}}をお選びください。<span class="kikaku1_check">必須項目</span></p>
+        <div class="kikaku_box kikaku1_box">
+            {% for key,ProductClass1 in Product.classCategories1 %}
+                <div class="testbtn" data-kikaku="p_class{{ key }}"><label><input type="radio" name="kikaku1" value="{{ key }}" class="code_{{ key }}"><span>{{ProductClass1}}</span></label></div>
+            {% endfor %}
+            
+        </div>
+        <p class="kikaku_title">{{Product.className2}}をお選びください。<span class="kikaku2_check">必須項目</span></p>
+        <div class="kikaku_box kikaku2_box">
+        {% set ki = "" %}
+        {% for ProductClass in Product.ProductClasses %}
+
+                {% if loop.first %}
+                    <div class="p_class{{ ProductClass.ClassCategory1.id }} selected_box">
+
+                {% elseif ki != ProductClass.ClassCategory1.id %}
+                    </div>
+                    <div class="p_class{{ ProductClass.ClassCategory1.id }}">
+                {% endif %}
+                <div class="testbtn_{{ ProductClass.ClassCategory1.id }}" data-id="{{ProductClass.id}}">
+                    <label>
+                        <input class="uooo code_{{ProductClass.id}}" type="radio" name="kikaku2" value="{{ProductClass.id}}">
+                            <span>
+                                <b>{{ ProductClass.ClassCategory2.name }}</b>
+                                {% if ProductClass.stock_find %}
+                                    {% if ProductClass.stock > 9 or ProductClass.stock == null %}
+                                    <b class="stocks">在庫: 〇</b>
+                                    {% else %}
+                                    <b class="stocks">在庫: {{ProductClass.stock}}</b>
+                                    {% endif %}
+                                {% else %}
+                                    <b class="stocks">在庫: ×</b>
+                                {% endif %}
+                                
+                                <b>{{ ProductClass.price02_inc_tax|price }}</b>
+                            </span>
+                        </label>
+                
+                {% if ProductClass.stock == 0 and ProductClass.stock_find == false %}
+                    <div class="stock0"><span></span></div>
+                {% endif %}
+                </div>
+                {% set ki = ProductClass.ClassCategory1.id %}
+        {% endfor %}
+        </div>
+            
+        </div>
+
+        <script>
+        window.addEventListener("load", function() {
+            const kikaku1_check = document.querySelector(".kikaku1_check");
+            const kikaku2_check = document.querySelector(".kikaku2_check");
+
+            //規格1を選択したとき
+            let select1 = document.querySelector("#classcategory_id1");
+            const options = select1.options;
+            const cart_radio_btn = document.querySelectorAll(".btn");
+            let box = "" ;
+
+            cart_radio_btn.forEach((e, i) => {
+                e.addEventListener("click", function(){
+                    box = "";
+                    options[i+1].selected = true;
+
+                    //カートに入れるための規格idをリセット
+                    const cart_value_set = document.querySelector('#product_class_id');
+                    cart_value_set.value = "";
+                    
+                    let select_box = document.querySelector('.selected_box');
+                    select_box.classList.remove('selected_box')
+                    box = e.dataset.kikaku;
+                    let select_b = document.querySelector(`.${box}`);
+                    select_b.setAttribute('class', `${box} selected_box`);
+                    fnSetClassCategories(
+                            document.form1, {{ form.classcategory_id2.vars.value|json_encode|raw }}
+                    );
+                    //ラジオボタンのチェックを取得後巻取をリセット
+                    let input_genders = document.querySelector("input[name=kikaku2]:checked");
+                    if(input_genders){
+                        input_genders.checked = false;
+                    }
+
+                    kikaku1_check.classList.add("checkok");
+                    kikaku2_check.setAttribute('class', `kikaku2_check`);
+                });
+            });
+
+            //規格2を選択したとき
+
+            let select2 = document.querySelector("#classcategory_id2");
+            const options2 = select2.options;
+            
+            {% for key,ProductClass1 in Product.classCategories1 %}
+                const cart_radio_btn_{{ key }} = document.querySelectorAll('.testbtn_{{ key }}');
+
+                
+                cart_radio_btn_{{ key }}.forEach((e,i) => {
+                    e.addEventListener("click", function(){
+                        let cart_value = e.dataset.id;
+
+                        //カートに入れるための規格idをセット
+                        const cart_value_set = document.querySelector('#product_class_id');
+                        if(options2.length > 2){
+                        options2[i+1].selected = true;
+                        }
+                        cart_value_set.value = cart_value;
+
+                        kikaku2_check.classList.add("checkok");
+                    });
+                });
+            {% endfor %}
+        });
+        </script>
+    {% else %}
+        {# 規格1つ #}
+        <p class="kikaku_title">{{Product.className1}}をお選びください。<span class="kikaku1_check">必須項目</span></p>
+        <div class="kikaku_box kikaku1_box kikaku1only_box">
+            {% for ProductClass in Product.ProductClasses %}
+
+                    <div class="testbtn" data-id="{{ProductClass.id}}">
+                        <label>
+                            <input class="uooo" type="radio" name="kikaku2" value="{{ProductClass.id}}">
+                            <span>
+                                <b>{{ ProductClass.ClassCategory1.name }}</b>
+                                {% if ProductClass.stock_find %}
+                                    {% if ProductClass.stock > 9 or ProductClass.stock == null %}
+                                    <b class="stocks">在庫: 〇</b>
+                                    {% else %}
+                                    <b class="stocks">在庫: {{ProductClass.stock}}</b>
+                                    {% endif %}
+                                {% else %}
+                                    <b class="stocks">在庫: ×</b>
+                                {% endif %}
+                                
+                                <b>{{ ProductClass.price02_inc_tax|price }}</b>
+                            </span>
+                        </label>
+                    {% if ProductClass.stock == 0 and ProductClass.stock_find == false %}
+                        <div class="stock0"><span></span></div>
+                    {% endif %}
+                    </div>
+                    
+            {% endfor %}
+        </div>
+        <script>
+            window.addEventListener("load", function() {
+                const kikaku1_check = document.querySelector(".kikaku1_check");
+
+                //規格1を選択したとき
+                let select1 = document.querySelector("#classcategory_id1");
+                const options = select1.options;
+                const cart_radio_btn = document.querySelectorAll(".testbtn");
+                cart_radio_btn.forEach((e, i) => {
+                    e.addEventListener("click", function(){
+                        options[i+1].selected = true;
+                        let cart_value = e.dataset.id;
+                        
+                        const cart_value_set = document.querySelector('#product_class_id');
+                        cart_value_set.value = cart_value;
+                        kikaku1_check.classList.add("checkok");
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+    <p class="stockinfo">在庫: 〇は10本以上となります。</p>
+
+            <script>
+            window.addEventListener("load", function() {
+                function getParam(name, url) {
+                    if (!url) url = window.location.href;
+                    name = name.replace(/[\[\]]/g, "\\$&");
+                    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                        results = regex.exec(url);
+                    if (!results) return null;
+                    if (!results[2]) return '';
+                    return decodeURIComponent(results[2].replace(/\+/g, " "));
+                }
+                let part1 = getParam('type1');
+                let part2 = getParam('type2');
+                let part3 = getParam('type3');
+                if(part1){
+                    const code_btn1 = document.querySelector(`.code_${part1}`);
+                    code_btn1.checked = true;
+                }
+                if(part2){
+                    const code_btn2 = document.querySelector(`.code_${part2}`);
+                    code_btn2.checked = true;
+                }
+                if(part3){
+                    const code_btn2 = document.querySelector(`.code_${part2}`);
+                    code_btn2.checked = true;
+                }
+            });
+        </script>
+{% endif %}
+</div>
