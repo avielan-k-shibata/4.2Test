@@ -1,10 +1,83 @@
+
  
- <script>
-    $(function() {
-    $('.product_detail').appendTo('.c-contentsArea__primaryCol');
+<script>
+    $(function () {
+        $('.product_detail').appendTo('.c-contentsArea__primaryCol');
+        $('#product_items').appendTo('.c-contentsArea__primaryCol');
+        $('#product_items').removeClass('d-none');
+        $(document).on('click', 'button.product-item-delete', function () {
+            var data = $(this).data();
+            $('#product-item_' + data.id + '').remove();
+        });
+
+        $('.add-another-collection-widget').click(function (e) {
+            var list = jQuery(jQuery(this).attr('data-list-selector'));
+            // Try to find the counter of the list or use the length of the list
+            var counter = list.data('widget-counter') | list.children().length;
+            if(!counter) { counter = list.children().length }
+            // grab the prototype template
+            var newWidget = list.attr('data-prototype');
+            // replace the "__name__" used in the id and name of the prototype
+            // with a number that's unique to your emails
+            // end name attribute looks like name="contact[emails][2]"
+            newWidget = newWidget.replace(/__name__/g, counter);
+            // Increase the counter
+            counter++;
+            // And store it, the length cannot be used if deleting widgets is allowed
+            list.data('widget-counter', counter);
+            // create a new list element and add it to the list
+            var newElem = $(list.attr('data-widget-tags')).html(newWidget);
+            newElem.appendTo(list);
+        });
     });
 </script>
- 
+                    {{ form_errors(form.ProductDetails) }}
+
  <div class="product_detail">
-test3333
- </div>
+    <div class="card rounded border-0 mb-4">
+        <div class="card-header">
+            {# <span class="card-title">{{ form.ProductDetail }}</span> #}
+            <span class="card-title">{{ form.ProductDetails.vars.label|trans }}</span>
+                        {# {{ form_widget(ProductDetails.name, { 'attr': { 'rows': 8 }}) }} #}
+                        {{ form_row(form.ProductDetails) }}
+                                  {{dump(form.ProductDetails)}}                     
+
+                                  {{dump(form.RelatedProducts)}}                     
+
+        </div>
+    </div>
+</div>
+
+
+<div id="product_items" class="d-none">
+    <div class="card rounded border-0 mb-4">
+        <div class="card-header">
+            <span class="card-title">商品項目追加</span>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col mb-2">
+                    {{ form_errors(form.ProductDetails) }}
+                    <ul id="product-item-group"
+                        data-prototype="{% filter escape %}{{ include('@Test/admin/Product/product_detail.twig', {'form': form.ProductDetails.vars.prototype}) }}{% endfilter %}"
+                        data-widget-tags="{{ '<li class="mb-2 product-item"></li>'|e }}"
+                        data-widget-counter="{{ form.ProductDetails|length }}">
+                        {% for child in form.ProductDetails %}
+                            <li class="mb-2 product-item">
+                                {{ include('@Test/admin/Product/product_detail.twig', {'form': child, index: loop.index0}) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mb-2">
+                    <button type="button"
+                            class="btn btn-ec-conversion add-another-collection-widget"
+                            data-list-selector="#product-item-group">追加
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

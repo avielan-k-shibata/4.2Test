@@ -15,6 +15,9 @@ namespace Plugin\Test\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Eccube\Annotation as Eccube;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Eccube\Annotation\EntityExtension;
 
 /**
  * @Eccube\EntityExtension("Eccube\Entity\Product")
@@ -45,5 +48,53 @@ trait ProductTrait
             }
         }
         return false;
+    }
+
+    /**
+     * @var ProductDetail[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Plugin\Test\Entity\ProductDetail", mappedBy="Product", cascade={"persist", "remove"})
+     * @ORM\OrderBy({
+     *     "id"="ASC"
+     * })
+     */
+    private $ProductDetails;
+
+    /**
+     * @return ProductDetail[]|Collection
+     */
+    public function getProductDetails()
+    {
+        if (null === $this->ProductDetails) {
+            $this->ProductDetails = new ArrayCollection();
+        }
+
+        return $this->ProductDetails;
+    }
+
+    /**
+     * @param ProductDetail $ProductDetail
+     */
+    public function addProductDetail(ProductDetail $ProductDetail)
+    {
+        if (null === $this->ProductDetails) {
+            $this->RelatedProducts = new ArrayCollection();
+        }
+
+        $this->ProductDetails[] = $ProductDetail;
+    }
+
+    /**
+     * @param ProductDetail $RelatedProduct
+     *
+     * @return bool
+     */
+    public function removeProductDetail(ProductDetail $ProductDetail)
+    {
+        if (null === $this->ProductDetails) {
+            $this->ProductDetails = new ArrayCollection();
+        }
+
+        return $this->ProductDetails->removeElement($ProductDetail);
     }
 }
