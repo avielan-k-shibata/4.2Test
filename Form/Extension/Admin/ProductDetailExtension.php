@@ -72,7 +72,6 @@ class ProductDetailExtension extends AbstractTypeExtension
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             /** @var Product $Product */
             $Product = $event->getData();
-            dump($Product);
             $form = $event->getForm();
             $form['ProductDetails']->setData($Product->getProductDetails());
         });

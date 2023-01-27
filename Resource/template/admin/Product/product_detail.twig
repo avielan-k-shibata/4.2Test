@@ -31,22 +31,22 @@
         });
     });
 </script>
-                    {{ form_errors(form.ProductDetails) }}
 
+                    {{ form_errors(form.ProductDetails) }}
+{# 
  <div class="product_detail">
     <div class="card rounded border-0 mb-4">
         <div class="card-header">
-            {# <span class="card-title">{{ form.ProductDetail }}</span> #}
-            <span class="card-title">{{ form.ProductDetails.vars.label|trans }}</span>
-                        {# {{ form_widget(ProductDetails.name, { 'attr': { 'rows': 8 }}) }} #}
-                        {{ form_row(form.ProductDetails) }}
-                                  {{dump(form.ProductDetails)}}                     
 
-                                  {{dump(form.RelatedProducts)}}                     
+            <span class="card-title">{{ form.ProductDetails.vars.label|trans }}</span>
+
+                        {{ form_row(form.ProductDetails) }}
+                        {{dump(form.ProductDetails.children)}}                     
+                        {{dump(form.ProductDetails.children[0].vars.value)}}                     
 
         </div>
     </div>
-</div>
+</div> #}
 
 
 <div id="product_items" class="d-none">
@@ -59,12 +59,14 @@
                 <div class="col mb-2">
                     {{ form_errors(form.ProductDetails) }}
                     <ul id="product-item-group"
-                        data-prototype="{% filter escape %}{{ include('@Test/admin/Product/product_detail.twig', {'form': form.ProductDetails.vars.prototype}) }}{% endfilter %}"
+                        data-prototype="{% filter escape %}{{ include('@Test/admin/Product/product_detail_prototype.twig', {'form': form.ProductDetails.vars.prototype}) }}{% endfilter %}"
                         data-widget-tags="{{ '<li class="mb-2 product-item"></li>'|e }}"
                         data-widget-counter="{{ form.ProductDetails|length }}">
                         {% for child in form.ProductDetails %}
                             <li class="mb-2 product-item">
-                                {{ include('@Test/admin/Product/product_detail.twig', {'form': child, index: loop.index0}) }}
+                                {{ include('@Test/admin/Product/product_detail_prototype.twig', {'form': child, index: loop.index0}) }}
+
+                                
                             </li>
                         {% endfor %}
                     </ul>

@@ -24,6 +24,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+
 /**
  * Class ProductDetailType.
  */
@@ -61,6 +63,7 @@ class ProductDetailType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'required' => false,
+                'label'=> "タイトル",
                 'attr' => [
                     'maxlength' => $this->eccubeConfig['eccube_stext_len'],
                 ],
@@ -69,11 +72,20 @@ class ProductDetailType extends AbstractType
                     new Length(['min' => 1, 'max' => $this->eccubeConfig['eccube_stext_len']]),
                 ],
             ])
-            ->add('sort_no', HiddenType::class, [
-                'label' => false,
-                'constraints' => [
-                    new NotBlank(),
-                ],
+            ->add('detail', TextType::class, [
+                'label'=> "内容",
+                'required' => false,
+                
+            ])
+            ->add('sort_no', IntegerType::class, [
+                'label'=> "並び順",
+                'required' => false,
+                
+            ])
+            ->add('contents', TextType::class, [
+                'label'=> "場所",
+                'required' => false,
+                
             ])
             ;
     }

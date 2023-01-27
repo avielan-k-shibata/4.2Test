@@ -21,12 +21,34 @@
             </div>
             <div class="row">
                 <div class="col-2">
-                    {{ form.content.vars.label }}
+                    {{ form.detail.vars.label }}
                 </div>
                 <div class="col mb-2">
                     <div>
-                        {{ form_widget(form.content) }}
-                        {{ form_errors(form.content) }}
+                        {{ form_widget(form.detail) }}
+                        {{ form_errors(form.detail) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    {{ form.sort_no.vars.label }}
+                </div>
+                <div class="col mb-2">
+                    <div>
+                        {{ form_widget(form.sort_no) }}
+                        {{ form_errors(form.sort_no) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    {{ form.contents.vars.label }}
+                </div>
+                <div class="col mb-2">
+                    <div>
+                        {{ form_widget(form.contents) }}
+                        {{ form_errors(form.contents) }}
                     </div>
                 </div>
             </div>

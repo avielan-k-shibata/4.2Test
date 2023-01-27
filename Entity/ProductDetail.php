@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Eccube\Entity\AbstractEntity;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-
+use Eccube\Entity\Product;
 /**
  * Class ProductDetail.
  *
@@ -45,16 +45,16 @@ class ProductDetail extends AbstractEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="detali", type="string", length=255)
+     * @ORM\Column(name="detail", type="string", length=255)
      */
     private $detail;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="check", type="string", length=255)
+     * @ORM\Column(name="contents", type="string", length=255)
      */
-    private $check;
+    private $contents;
 
     /**
      * @var int
@@ -63,19 +63,6 @@ class ProductDetail extends AbstractEntity
      */
     private $sort_no;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="create_date", type="datetimetz")
-     */
-    private $create_date;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="update_date", type="datetimetz")
-     */
-    private $update_date;
 
     /**
      * @var Product
@@ -151,9 +138,9 @@ class ProductDetail extends AbstractEntity
      *
      * @return string
      */
-    public function getCheck()
+    public function getContents()
     {
-        return $this->check;
+        return $this->contents;
     }
 
     /**
@@ -163,9 +150,9 @@ class ProductDetail extends AbstractEntity
      *
      * @return ProductDetail
      */
-    public function setCheck($check)
+    public function setContents($contents)
     {
-        $this->check = $check;
+        $this->contents = $contents;
 
         return $this;
     }
@@ -195,54 +182,6 @@ class ProductDetail extends AbstractEntity
     }
 
     /**
-     * Set create_date.
-     *
-     * @param \DateTime $createDate
-     *
-     * @return ProductDetail
-     */
-    public function setCreateDate($createDate)
-    {
-        $this->create_date = $createDate;
-
-        return $this;
-    }
-
-    /**
-     * Get create_date.
-     *
-     * @return \DateTime
-     */
-    public function getCreateDate()
-    {
-        return $this->create_date;
-    }
-
-    /**
-     * Set update_date.
-     *
-     * @param \DateTime $updateDate
-     *
-     * @return ProductDetail
-     */
-    public function setUpdateDate($updateDate)
-    {
-        $this->update_date = $updateDate;
-
-        return $this;
-    }
-
-    /**
-     * Get update_date.
-     *
-     * @return \DateTime
-     */
-    public function getUpdateDate()
-    {
-        return $this->update_date;
-    }
-
-    /**
      * get related product content.
      *
      * @return Product
@@ -259,7 +198,7 @@ class ProductDetail extends AbstractEntity
      *
      * @return $this
      */
-    public function setProduct(Product $Product)
+    public function setProduct(Product $Product): self
     {
         $this->Product = $Product;
 
