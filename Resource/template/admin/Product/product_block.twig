@@ -1,0 +1,74 @@
+
+<script>
+    $(function () {
+        $('#product_blocks').appendTo('.c-contentsArea__secondaryCol');
+        $('#product_blocks').removeClass('d-none');
+
+        console.log(321);
+    });
+</script>
+
+<div id="product_blocks" class="c-secondaryCol">
+    <div class="card rounded border-0 mb-4">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-8">
+                    <div class="d-inline-block">
+                        <span class="card-title">
+                            アイテムブロック
+                        </span>
+                    </div>
+                </div>
+                <div class="col-4 text-end">
+                    <a data-bs-toggle="collapse" href="#tag" aria-expanded="false" aria-controls="tag">
+                        <i class="fa fa-angle-up fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="collapse show ec-cardCollapse" id="tag">
+            <div class="card-body">
+                {% if(Tags|length > 0) %}
+                    {% for Tag in Tags %}
+                        <div class="d-inline-block mb-2 me-2">
+                            <button class="btn btn-outline-primary" type="button">{{ Tag.name }}</button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="d-block mb-3" data-bs-toggle="collapse" href="#allTags" role="button"
+                        aria-expanded="false" aria-controls="allTags">
+                    <a>
+                        <i class="fa fa-plus-square-o fw-bold me-1"></i>
+                        <span class="fw-bold">{{ 'admin.product.save_tag'|trans }}</span>
+                    </a>
+                </div>
+                <div class="collapse p-3 bg-ec-lightGray mb-3 ec-collapse" id="allTags">
+                    <div class="d-none">
+                        333
+                    </div>
+                    {% if(TagsList|length > 0) %}
+                        {% for Tag in TagsList %}
+                            <div class="d-inline-block mb-2 me-2">
+                                <button class="btn btn-outline-secondary" type="button"
+                                        data-tag-id="{{ Tag.id }}">{{ Tag.name }}</button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <div class="d-block mb-3" data-bs-toggle="collapse" href="#allTags" role="button"
+                            aria-expanded="false" aria-controls="allTags"></div>
+                </div>
+
+                <div class="d-block text-center">
+                    <a href="{{ path('admin_product_tag') }}"
+                        class="btn w-100 btn-ec-regular"
+                        data-action="confirm"
+                        title="{{ 'admin.common.move_to_confirm_message'|trans({
+                            '%name%' : 'admin.product.tag_management'|trans }) }}">{{ 'admin.product.move_to_tag'|trans }}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

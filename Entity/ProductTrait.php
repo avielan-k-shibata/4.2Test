@@ -97,4 +97,62 @@ trait ProductTrait
 
         return $this->ProductDetails->removeElement($ProductDetail);
     }
+    
+        /**
+     * @var ProductBlock[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="Plugin\Test\Entity\ProductBlock", mappedBy="Product", cascade={"remove"})
+     */
+    private $ProductBlock;
+    /**
+     * Add productBlock.
+     *
+     * @param \Plugin\Test\Entity\ProductBlock $productBlock
+     *
+     * @return Product
+     */
+    public function addProductBlock(ProductBlock $productBlock)
+    {
+        $this->ProductBlock[] = $productBlock;
+
+        return $this;
+    }
+
+    /**
+     * Remove productBlock.
+     *
+     * @param \Plugin\Test\Entity\ProductBlock $productBlock
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeProductBlock(ProductBlock $productBlock)
+    {
+        return $this->ProductBlock->removeElement($productBlock);
+    }
+
+    /**
+     * Get productBlock.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProductBlock()
+    {
+        return $this->ProductBlock;
+    }
+
+    /**
+     * Get Block
+     * フロント側タグsort_no順の配列を作成する
+     *
+     * @return []Block
+     */
+    public function getBlocks()
+    {
+        $Blocks = [];
+
+        foreach ($this->getProductBlock() as $productBlock) {
+            $Blocks[] = $productBlock->getBlock();
+        }
+        return $Blocks;
+    }
 }

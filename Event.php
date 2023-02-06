@@ -47,5 +47,6 @@ class Event implements EventSubscriberInterface
     public function onRenderAdminProduct(TemplateEvent $event)
     {
         $event->addSnippet('@Test/admin/Product/product_detail.twig');
+        $event->addSnippet('@Test/admin/Product/product_block.twig');
     }
 }
