@@ -26,7 +26,7 @@ use Eccube\Entity\Block;
      * @ORM\InheritanceType("SINGLE_TABLE")
      * @ORM\DiscriminatorColumn(name="discriminator_type", type="string", length=255)
      * @ORM\HasLifecycleCallbacks()
-     * @ORM\Entity(repositoryClass="Eccube\Repository\ProductBlockRepository")
+     * @ORM\Entity(repositoryClass="Plugin\Test\Repository\ProductBlockRepository")
      */
     class ProductBlock extends AbstractEntity
     {

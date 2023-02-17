@@ -1,0 +1,10 @@
+<div>
+                {% if(Blocks|length > 0) %}
+                    {% for key, Block in Blocks %}
+                        <div class={{Block.file_name}} id={{key}}>
+                            {{ include('Block/'~ Block.file_name ~'.twig', ignore_missing = true) }}
+                        <div>
+                    {% endfor %}
+                {% endif %}
+                           
+</div>

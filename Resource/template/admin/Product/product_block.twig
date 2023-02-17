@@ -4,7 +4,6 @@
         $('#product_blocks').appendTo('.c-contentsArea__secondaryCol');
         $('#product_blocks').removeClass('d-none');
 
-        console.log(321);
     });
 </script>
 
@@ -26,49 +25,84 @@
                 </div>
             </div>
         </div>
-
         <div class="collapse show ec-cardCollapse" id="tag">
             <div class="card-body">
-                {% if(Tags|length > 0) %}
-                    {% for Tag in Tags %}
+                {% if(Blocks|length > 0) %}
+                <div id="selectBlocks">
+                    {% for Block in Blocks %}
+
                         <div class="d-inline-block mb-2 me-2">
-                            <button class="btn btn-outline-primary" type="button">{{ Tag.name }}</button>
+                            <button class="btn btn-outline-primary" type="button" data-blockId="{{ Block.id }}">{{ Block.name }}</button>
                         </div>
                     {% endfor %}
+                </div>
                 {% endif %}
 
-                <div class="d-block mb-3" data-bs-toggle="collapse" href="#allTags" role="button"
-                        aria-expanded="false" aria-controls="allTags">
+                <div class="d-block mb-3" data-bs-toggle="collapse" href="#allBlocks" role="button"
+                        aria-expanded="false" aria-controls="allBlocks">
                     <a>
                         <i class="fa fa-plus-square-o fw-bold me-1"></i>
-                        <span class="fw-bold">{{ 'admin.product.save_tag'|trans }}</span>
+                        <span class="fw-bold">ブロック登録</span>
                     </a>
                 </div>
-                <div class="collapse p-3 bg-ec-lightGray mb-3 ec-collapse" id="allTags">
+                <div class="collapse p-3 bg-ec-lightGray mb-3 ec-collapse" id="allBlocks">
                     <div class="d-none">
-                        333
+                        {{ form_widget(form.Block) }}
                     </div>
-                    {% if(TagsList|length > 0) %}
-                        {% for Tag in TagsList %}
+                    {% if(BlocksList|length > 0) %}
+                        {% for Block in BlocksList %}
+                        {% set blockType = Block.file_name |slice(0,3) %}
+                        {% if(blockType == "ib_") %}
+
+                        {% endif %}
                             <div class="d-inline-block mb-2 me-2">
                                 <button class="btn btn-outline-secondary" type="button"
-                                        data-tag-id="{{ Tag.id }}">{{ Tag.name }}</button>
+                                        data-block-id="{{ Block.id }}">{{ Block.name }}</button>
                             </div>
                         {% endfor %}
                     {% endif %}
 
-                    <div class="d-block mb-3" data-bs-toggle="collapse" href="#allTags" role="button"
-                            aria-expanded="false" aria-controls="allTags"></div>
+                    <div class="d-block mb-3" data-bs-toggle="collapse" href="#allBlocks" role="button"
+                            aria-expanded="false" aria-controls="allBlocks"></div>
                 </div>
 
-                <div class="d-block text-center">
-                    <a href="{{ path('admin_product_tag') }}"
-                        class="btn w-100 btn-ec-regular"
-                        data-action="confirm"
-                        title="{{ 'admin.common.move_to_confirm_message'|trans({
-                            '%name%' : 'admin.product.tag_management'|trans }) }}">{{ 'admin.product.move_to_tag'|trans }}</a>
-                </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+
+        $(function() {
+            
+            var selectBlocks = document.querySelectorAll('#selectBlocks button');
+            var selectBlocksNum = [];
+            selectBlocks.forEach(e => {
+                selectBlocksNum.push(e.dataset.blockid)                   
+			});
+            // タグ管理
+            var mainBlocks = $('#allBlocks');
+            var adminProductBlock = $('#admin_product_Block');
+            $('input', adminProductBlock).each(function() {
+                var a = $(this).val();
+                if (selectBlocksNum.includes(a)) {
+                    $('button[data-block-id="' + $(this).val() + '"]').removeClass('btn-outline-secondary').addClass('btn-outline-primary');
+                    //$(this).prop('checked', true);
+
+                }
+            });
+            mainBlocks.on('click', 'button.btn', function() {
+                var btnTag = $(this);
+                var blockId = btnTag.data('block-id');
+                if (btnTag.hasClass('btn-outline-primary')) {
+                    btnTag.removeClass('btn-outline-primary').addClass('btn-outline-secondary');
+                    $('input[value="' + blockId + '"]', mainBlocks).prop('checked', false);
+                } else {
+                    btnTag.removeClass('btn-outline-secondary').addClass('btn-outline-primary');
+                    $('input[value="' + blockId + '"]', mainBlocks).prop('checked', true);
+                }
+            });
+
+        });
+    
+</script>

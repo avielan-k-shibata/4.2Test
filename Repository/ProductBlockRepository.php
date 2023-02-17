@@ -22,7 +22,7 @@ class ProductBlockRepository extends AbstractRepository
      */
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, ProductDetail::class);
+        parent::__construct($registry, ProductBlock::class);
     }
 
 

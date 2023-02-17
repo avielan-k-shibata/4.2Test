@@ -97,8 +97,8 @@ trait ProductTrait
 
         return $this->ProductDetails->removeElement($ProductDetail);
     }
-    
-        /**
+
+    /**
      * @var ProductBlock[]|Collection
      *
      * @ORM\OneToMany(targetEntity="Plugin\Test\Entity\ProductBlock", mappedBy="Product", cascade={"remove"})
