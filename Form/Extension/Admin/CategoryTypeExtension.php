@@ -15,13 +15,11 @@ namespace Plugin\Test\Form\Extension\Admin;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Eccube\Common\EccubeConfig;
-use Eccube\Entity\Product;
+use Eccube\Entity\Category;
 use Eccube\Entity\Block;
 
-use Eccube\Form\Type\Admin\ProductType;
-use Plugin\RelatedProduct42\Entity\RelatedProduct;
-use Plugin\Test\Entity\ProductDetail;
-use Plugin\Test\Entity\ProductBlock;
+use Eccube\Form\Type\Admin\CategoryType;
+use Plugin\Test\Entity\CategoryBlock;
 use Plugin\Test\Form\Type\Admin\ProductDetailType;
 use Plugin\Test\Form\Type\Admin\ProductBlockType;
 use Symfony\Component\Form\AbstractTypeExtension;
@@ -39,9 +37,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Eccube\Repository\BlockRepository;
 
 /**
- * Class ProductDetailExtension.
+ * Class CategoryTypeExtension.
  */
-class ProductDetailExtension extends AbstractTypeExtension
+class CategoryTypeExtension extends AbstractTypeExtension
 {
     /**
      * @var EccubeConfig
@@ -75,17 +73,8 @@ class ProductDetailExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder
-            ->add('ProductDetails', CollectionType::class, [
-                'label' => 'product_detail.block.title',
-                'entry_type' => ProductDetailType::class,
-                'required' => false,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true
-            ])
-        ;
-                    // 詳細な説明
+
+        // 詳細な説明
         $builder->add('Block', ChoiceType::class, [
             'choice_label' => 'Name',
             'multiple' => true,
@@ -95,25 +84,8 @@ class ProductDetailExtension extends AbstractTypeExtension
             'choice_value' => function (Block $Block = null) {
                 return $Block ? $Block->getId() : null;
             },
-        ])
-        // タグ
-        // ->add('blocks', CollectionType::class, [
-        //     'entry_type' => HiddenType::class,
-        //     'prototype' => true,
-        //     'mapped' => false,
-        //     'allow_add' => true,
-        //     'allow_delete' => true,
-        // ])
-        ;
-        $builder
-            ->add('ProductBlock', CollectionType::class, [
-                'entry_type' => ProductBlockType::class,
-                'required' => false,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'prototype' => true
-            ])
-        ;
+        ]);
+
         $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
             /** @var Product $Product */
             $Product = $event->getData();
@@ -121,28 +93,7 @@ class ProductDetailExtension extends AbstractTypeExtension
             $form['ProductDetails']->setData($Product->getProductDetails());
             $form['ProductBlock']->setData($Product->getProductBlock());
         });
-        $builder
-            ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event){
-                /** @var Product $data */
-                $data = $event->getData();
-                $form = $event->getForm();
-
-                // 商品項目をクリア
-                $productItems = $this->entityManager->getRepository(ProductDetail::class)
-                    ->findBy(["Product" => $data]);
-                foreach ($productItems as $productItem) {
-                    $this->entityManager->remove($productItem);
-                }
-
-                // 商品項目を登録
-                $productItems = $form->get('ProductDetails')->getData();
-
-                /** @var ProductItem $productItem */
-                foreach($productItems as $productItem) {
-                    $productItem->setProduct($data);
-                    $this->entityManager->persist($productItem);
-                }
-        });
+        
         $builder
         ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event){
             /** @var Product $data */
@@ -178,7 +129,7 @@ class ProductDetailExtension extends AbstractTypeExtension
      */
     public function getExtendedType()
     {
-        return ProductType::class;
+        return CategoryType::class;
     }
 
     /**
@@ -188,6 +139,6 @@ class ProductDetailExtension extends AbstractTypeExtension
      */
     public static function getExtendedTypes(): iterable
     {
-        yield ProductType::class;
+        yield CategoryType::class;
     }
 }

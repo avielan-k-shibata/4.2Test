@@ -9,6 +9,8 @@ use Eccube\Entity\Product;
 use Eccube\Repository\ProductRepository;
 
 use Eccube\Repository\BlockRepository;
+use Eccube\Repository\CategoryRepository;
+
 class Event implements EventSubscriberInterface
 {
     /**
@@ -23,13 +25,19 @@ class Event implements EventSubscriberInterface
      * @var ProductRepository
      */
     protected $productRepository;
+    /**
+     * @var CategoryRepository
+     */
+    protected $categoryRepository;
 
     public function __construct(
         BlockRepository $blockRepository,
-        ProductRepository $productRepository
+        ProductRepository $productRepository,
+        CategoryRepository $categoryRepository
     ){
         $this->blockRepository = $blockRepository;
         $this->productRepository = $productRepository;
+        $this->categoryRepository = $categoryRepository;
 
     }
 
@@ -39,7 +47,7 @@ class Event implements EventSubscriberInterface
             'Product/detail.twig' => 'productDetail',
             '@admin/Order/order_pdf.twig' => 'test2',
             '@admin/Product/product.twig' => 'onRenderAdminProduct',
-
+            '@admin/Product/category.twig' => 'onRenderAdminCategory',
         ];
     }
         /**
@@ -88,5 +96,20 @@ class Event implements EventSubscriberInterface
         $event->setParameters($parameters);
         $event->addSnippet('@Test/admin/Product/product_detail.twig');
         $event->addSnippet('@Test/admin/Product/product_block.twig');
+    }
+
+    public function onRenderAdminCategory(TemplateEvent $event)
+    {
+        $parameters = $event->getParameters();
+        $BlocksList = $this->blockRepository->getList(10);
+        $parameters['BlocksList'] = $BlocksList;
+        $parameters['Blocks'] = "";
+        if($parameters["TargetCategory"]["Parent"]){
+            $Category = $this->categoryRepository->find($parameters["TargetCategory"]["Parent"]["id"]);
+            $parameters['Blocks'] = $Category->getBlocks();
+
+            $event->setParameters($parameters);
+            $event->addSnippet('@Test/admin/Product/category_block.twig');
+        }
     }
 }

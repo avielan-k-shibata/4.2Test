@@ -98,6 +98,7 @@ trait ProductTrait
         return $this->ProductDetails->removeElement($ProductDetail);
     }
 
+    // 商品とブロックの紐づけ
     /**
      * @var ProductBlock[]|Collection
      *
