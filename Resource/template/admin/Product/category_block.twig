@@ -1,13 +1,13 @@
 
 <script>
     $(function () {
-        $('#product_blocks').appendTo('.c-contentsArea__secondaryCol');
-        $('#product_blocks').removeClass('d-none');
+        $('#category_blocks').appendTo('.c-contentsArea__secondaryCol');
+        $('#category_blocks').removeClass('d-none');
 
     });
 </script>
 
-<div id="product_blocks" class="c-secondaryCol">
+<div id="category_blocks" class="c-secondaryCol">
     <div class="card rounded border-0 mb-4">
         <div class="card-header">
             <div class="row">
@@ -26,48 +26,58 @@
             </div>
         </div>
         <div class="collapse show ec-cardCollapse" id="tag">
-            <div class="card-body">
-                {% if(Blocks|length > 0) %}
-                <div id="selectBlocks">
-                    {% for Block in Blocks %}
+            <form action="{{ (Parent and Parent.id) ? url('admin_product_category_block_edit', {'parent_id': Parent.id}) : url('admin_product_category') }}"  method="POST">
+                <input type="hidden" id="admin_category_block_token" name="admin_category[_token]">
+                <script>
+                    const block_token = $('#admin_category__token').val(); 
+                    $('#admin_category_block_token').val(block_token);
+                </script>
+                <div class="card-body">
+                    {% if(Blocks|length > 0) %}
+                    <div id="selectBlocks">
+                        {% for Block in Blocks %}
 
-                        <div class="d-inline-block mb-2 me-2">
-                            <button class="btn btn-outline-primary" type="button" data-blockId="{{ Block.id }}">{{ Block.name }}</button>
-                        </div>
-                    {% endfor %}
-                </div>
-                {% endif %}
-                {# {{ form_widget(form.Block) }} #}
-                {{dump(form)}}
-                <div class="d-block mb-3" data-bs-toggle="collapse" href="#allBlocks" role="button"
-                        aria-expanded="false" aria-controls="allBlocks">
-                    <a>
-                        <i class="fa fa-plus-square-o fw-bold me-1"></i>
-                        <span class="fw-bold">ブロック登録</span>
-                    </a>
-                </div>
-                <div class="collapse p-3 bg-ec-lightGray mb-3 ec-collapse" id="allBlocks">
-                    <div class="d-none">
-                        {# {{ form_widget(form.Block) }} #}
-                    </div>
-                    {% if(BlocksList|length > 0) %}
-                        {% for Block in BlocksList %}
-                        {% set blockType = Block.file_name |slice(0,3) %}
-                        {% if(blockType == "ib_") %}
-
-                        {% endif %}
                             <div class="d-inline-block mb-2 me-2">
-                                <button class="btn btn-outline-secondary" type="button"
-                                        data-block-id="{{ Block.id }}">{{ Block.name }}</button>
+                                <button class="btn btn-outline-primary" type="button" data-blockId="{{ Block.id }}">{{ Block.name }}</button>
                             </div>
                         {% endfor %}
+                    </div>
                     {% endif %}
 
                     <div class="d-block mb-3" data-bs-toggle="collapse" href="#allBlocks" role="button"
-                            aria-expanded="false" aria-controls="allBlocks"></div>
-                </div>
+                            aria-expanded="false" aria-controls="allBlocks">
+                        <a>
+                            <i class="fa fa-plus-square-o fw-bold me-1"></i>
+                            <span class="fw-bold">ブロック登録</span>
+                        </a>
+                    </div>
+                    <div class="collapse p-3 bg-ec-lightGray mb-3 ec-collapse" id="allBlocks">
+                        <div class="d-none">
+                        </div>
+                            {{ form_widget(form.Block) }}
+                        {% if(BlocksList|length > 0) %}
+                            {% for Block in BlocksList %}
+                            {% set blockType = Block.file_name |slice(0,3) %}
+                            {% if(blockType == "ib_") %}
 
-            </div>
+                            {% endif %}
+                                <div class="d-inline-block mb-2 me-2">
+                                    <button class="btn btn-outline-secondary" type="button"
+                                            data-block-id="{{ Block.id }}">{{ Block.name }}</button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+
+                        <div class="d-block mb-3" data-bs-toggle="collapse" href="#allBlocks" role="button"
+                                aria-expanded="false" aria-controls="allBlocks"></div>
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-ec-conversion px-5" type="submit" {{ csrf_token_for_anchor() }}>
+                            ブロック{{ 'admin.common.registration'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -83,8 +93,8 @@
 			});
             // タグ管理
             var mainBlocks = $('#allBlocks');
-            var adminProductBlock = $('#admin_product_Block');
-            $('input', adminProductBlock).each(function() {
+            var adminCategoryBlock = $('#admin_category_Block');
+            $('input', adminCategoryBlock).each(function() {
                 var a = $(this).val();
                 if (selectBlocksNum.includes(a)) {
                     $('button[data-block-id="' + $(this).val() + '"]').removeClass('btn-outline-secondary').addClass('btn-outline-primary');

@@ -38,7 +38,7 @@
                 </div>
                 {% endif %}
                 {{dump(form)}}
-{{ form_widget(form.Block) }}
+
                 <div class="d-block mb-3" data-bs-toggle="collapse" href="#allBlocks" role="button"
                         aria-expanded="false" aria-controls="allBlocks">
                     <a>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="collapse p-3 bg-ec-lightGray mb-3 ec-collapse" id="allBlocks">
                     <div class="d-none">
-                        {# {{ form_widget(form.Block) }} #}
+                        {{ form_widget(form.Block) }}
                     </div>
                     {% if(BlocksList|length > 0) %}
                         {% for Block in BlocksList %}

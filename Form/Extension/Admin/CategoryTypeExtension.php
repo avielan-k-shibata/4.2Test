@@ -77,6 +77,7 @@ class CategoryTypeExtension extends AbstractTypeExtension
         // 詳細な説明
         $builder->add('Block', ChoiceType::class, [
             'choice_label' => 'Name',
+            'csrf_protection' => false,
             'multiple' => true,
             'mapped' => false,
             'expanded' => true,
@@ -85,41 +86,6 @@ class CategoryTypeExtension extends AbstractTypeExtension
                 return $Block ? $Block->getId() : null;
             },
         ]);
-
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
-            /** @var Product $Product */
-            $Product = $event->getData();
-            $form = $event->getForm();
-            $form['ProductDetails']->setData($Product->getProductDetails());
-            $form['ProductBlock']->setData($Product->getProductBlock());
-        });
-        
-        $builder
-        ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event){
-            /** @var Product $data */
-            $Product = $event->getData();
-            $form = $event->getForm();
-
-            $productItems = $this->entityManager->getRepository(ProductBlock::class)
-            ->findBy(["Product" => $Product]);
-            foreach ($productItems as $productItem) {
-                $this->entityManager->remove($productItem);
-                $this->entityManager->flush();
-            }
-            // 商品項目を登録
-            $Blocks = $form->get('Block')->getData();
-            /** @var ProductItem $productItem */
-            foreach($Blocks as $Block) {
-                $ProductBlock = new ProductBlock();
-                $ProductBlock 
-                    ->setProductId($Product->getId())
-                    ->setBlockId($Block->getId())
-                    ->setProduct($Product)
-                    ->setBlock($Block);
-                // $Product->addProductBlock($ProductBlock);
-                $this->entityManager->persist($ProductBlock);
-            }
-    });
     }
 
     /**
