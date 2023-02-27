@@ -64,10 +64,11 @@ class Event implements EventSubscriberInterface
             $parameters['Blocks'] = $Product->getBlocks();
         }
         $event->setParameters($parameters);
-        
+
         $event->addSnippet('@Test/default/MatricsCart.twig');
         $event->addSnippet('@Test/default/product_block.twig');
-        
+        $event->addSnippet('@Test/default/category_block.twig');
+
     }
     public function test2(TemplateEvent $event)
     {

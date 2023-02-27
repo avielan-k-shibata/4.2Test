@@ -53,8 +53,8 @@
                     </div>
                     <div class="collapse p-3 bg-ec-lightGray mb-3 ec-collapse" id="allBlocks">
                         <div class="d-none">
-                        </div>
                             {{ form_widget(form.Block) }}
+                        </div>
                         {% if(BlocksList|length > 0) %}
                             {% for Block in BlocksList %}
                             {% set blockType = Block.file_name |slice(0,3) %}

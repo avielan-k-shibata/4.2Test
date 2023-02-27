@@ -1,0 +1,9 @@
+{% for ProductCategory in Product.ProductCategories %}
+    {% for Category in ProductCategory.Category.path %}
+        {% for key, Block in Category.CategoryBlock %}
+            <div class={{Block.Block.file_name}} id={{key}}>
+                {{ include('Block/'~ Block.Block.file_name ~'.twig', ignore_missing = true) }}
+            <div>
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
