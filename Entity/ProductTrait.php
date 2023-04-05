@@ -78,7 +78,7 @@ trait ProductTrait
     public function addProductDetail(ProductDetail $ProductDetail)
     {
         if (null === $this->ProductDetails) {
-            $this->RelatedProducts = new ArrayCollection();
+            $this->ProductDetails = new ArrayCollection();
         }
 
         $this->ProductDetails[] = $ProductDetail;

@@ -1,0 +1,35 @@
+<script>
+    $(function () {
+        $('#order_plus').appendTo('.c-contentsArea__primaryCol');
+    });
+</script>
+
+<div id="order_plus">
+<div class="card rounded border-0 mb-4">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-8">
+                    <div class="d-inline-block">
+                        <span class="card-title">
+                            アイテムブロック
+                        </span>
+                    </div>
+                </div>
+                <div class="col-4 text-end">
+                    <a data-bs-toggle="collapse" href="#tag" aria-expanded="false" aria-controls="tag">
+                        <i class="fa fa-angle-up fa-lg"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+          1{{form_widget(form.OrderPlus)}}
+          2
+        </div>
+        <div class="collapse show ec-cardCollapse" id="tag">
+            
+        </div>
+    </div>
+  {{dump(form.OrderPlus)}}
+  {{dump(form.OrderItems)}}
+</div>

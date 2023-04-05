@@ -48,6 +48,8 @@ class Event implements EventSubscriberInterface
             '@admin/Order/order_pdf.twig' => 'test2',
             '@admin/Product/product.twig' => 'onRenderAdminProduct',
             '@admin/Product/category.twig' => 'onRenderAdminCategory',
+            '@admin/Order/edit.twig' => 'onRenderAdminOrder',
+
         ];
     }
         /**
@@ -79,7 +81,7 @@ class Event implements EventSubscriberInterface
 
     }
 
-        /**
+    /**
      * 管理画面：商品登録画面に商品詳細フォームを表示する.
      *
      * @param TemplateEvent $event
@@ -112,5 +114,17 @@ class Event implements EventSubscriberInterface
             $event->setParameters($parameters);
             $event->addSnippet('@Test/admin/Product/category_block.twig');
         }
+    }
+    
+
+    /**
+     * 管理画面：受注編集画面
+     *
+     * @param TemplateEvent $event
+     */
+    public function onRenderAdminOrder(TemplateEvent $event)
+    {
+        $event->addSnippet('@Test/admin/Order/order_plus.twig');
+
     }
 }

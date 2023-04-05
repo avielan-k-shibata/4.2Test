@@ -114,13 +114,13 @@ class ProductDetailExtension extends AbstractTypeExtension
                 'prototype' => true
             ])
         ;
-        $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
-            /** @var Product $Product */
-            $Product = $event->getData();
-            $form = $event->getForm();
-            $form['ProductDetails']->setData($Product->getProductDetails());
-            $form['ProductBlock']->setData($Product->getProductBlock());
-        });
+        // $builder->addEventListener(FormEvents::POST_SET_DATA, function (FormEvent $event) {
+        //     /** @var Product $Product */
+        //     $Product = $event->getData();
+        //     $form = $event->getForm();
+        //     $form['ProductDetails']->setData($Product->getProductDetails());
+        //     $form['ProductBlock']->setData($Product->getProductBlock());
+        // });
         $builder
             ->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event){
                 /** @var Product $data */

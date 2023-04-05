@@ -203,7 +203,8 @@ class ProductDetail extends AbstractEntity
         $this->Product = $Product;
 
         return $this;
-    }    /**
+    }    
+    /**
      * Unique check.
      *
      * @param ClassMetadata $metadata
